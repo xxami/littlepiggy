@@ -1,11 +1,28 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+	"text/template"
+)
 
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		w.Write([]byte("Hello, world!"))
+		w.Header().Add("Content Type", "text/html")
+		tmpl, err := template.New("test").Parse(doc)
+		if err == nil {
+			tmpl.Execute(w, nil)
+		}
 	})
 
 	http.ListenAndServe(":8000", nil)
 }
+
+const doc = `
+<!DOCTYPE html>
+<html>
+<head><title></title></head>
+<body>
+    <h1>Hello, world!</h1>
+</body>
+</html>
+`
